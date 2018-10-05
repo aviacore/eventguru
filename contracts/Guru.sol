@@ -1,0 +1,257 @@
+pragma solidity ^0.4.24;
+
+import "./ERC223.sol";
+import "openzeppelin-solidity/contracts/ownership/Contactable.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+
+
+/**
+ * @title GURU ERC223 token implementation
+ * @author rjkz808
+ */
+contract GuruInternal is ERC223, Contactable {
+  using AddressUtils for address;
+  using SafeMath for uint256;
+
+  string internal constant name_ = "GURU";
+  string internal constant symbol_ = "GURU";
+  uint8 internal constant decimals_ = 4;
+  bytes4 internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
+  uint256 public totalSupply;
+
+  mapping (address => uint256) internal balances;
+  mapping (address => mapping (address => uint256)) internal allowed;
+
+  event Approval(
+    address indexed owner,
+    address indexed spender,
+    uint256 value
+  );
+  event Mint(address indexed to, uint256 value);
+
+  /**
+   * @dev Gets the token name
+   * @return string the token name
+   */
+  function name() public view returns (string) {
+    return name_;
+  }
+
+  /**
+   * @dev Gets the token short code
+   * @return string the token symbol
+   */
+  function symbol() public view returns (string) {
+    return symbol_;
+  }
+
+  /**
+   * @dev Gets the token divisibility value
+   * @return uint8 the token decimals
+   */
+  function decimals() public view returns (uint8) {
+    return decimals_;
+  }
+
+  /**
+   * @dev Gets the total amount of tokens in circulation
+   * @return uint256 the total supply
+   */
+  function totalSupply() public view returns (uint256) {
+    return totalSupply;
+  }
+
+  /**
+   * @dev Gets an account tokens balance
+   * @param _who address
+   * @return uint256 the account owned tokens amount
+   */
+  function balanceOf(address _who) public view returns (uint256) {
+    require(_who != address(0));
+    return balances[_who];
+  }
+
+  /**
+   * @dev Gets
+   */
+  function allowance(address _owner, address _spender)
+    public view returns (uint256)
+  {
+    require(_owner != address(0));
+    require(_spender != address(0));
+    return allowed[_owner][_spender];
+  }
+
+  /**
+   * @dev ERC20-compatible function to send tokens
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @return bool the transaction state
+   */
+  function transfer(address _to, uint256 _value) public returns (bool) {
+    return transfer(_to, _value, "");
+  }
+
+  /**
+   * @dev Function to send tokens
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @param _data bytes the transaction metadata
+   * @return bool the transaction state
+   */
+  function transfer(address _to, uint256 _value, bytes _data)
+    public returns (bool)
+  {
+    return transfer(_to, _value, _data, tokenFallback);
+  }
+
+  /**
+   * @dev Function to send tokens wit the custom fallback call
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @param _data bytes the transaction metadata
+   * @param _customFallback string the fallback function name to be called
+   * @return bool the transaction state
+   */
+  function transfer(
+    address _to,
+    uint256 _value,
+    bytes _data,
+    string _customFallback
+  )
+    public
+    returns (bool)
+  {
+    require(_to != address(0));
+    require(_value <= balances[msg.sender]);
+
+    balances[_to] = balances[_to].add(_value);
+    balances[msg.sender] = balances[msg.sender].sub(_value);
+    _callFallback(msg.sender, _to, _value, _data, _customFallback);
+
+    emit Transfer(msg.sender, _to, _value, _data);
+    return true;
+  }
+
+  /**
+   * @dev Function to send the approved tokens
+   * @param _from address the tokens owner
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @return bool the transaction state
+   */
+  function transferFrom(
+    address _from,
+    address _to,
+    uint256 _value
+  )
+    public
+    returns (bool)
+  {
+    return transferFrom(_from, _to, _value, "");
+  }
+
+  /**
+   * @dev Function to send the approved tokens
+   * @param _from address the tokens owner
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @param _data bytes the transaction metadata
+   * @return bool the transaction state
+   */
+  function transferFrom(
+    address _from,
+    address _to,
+    uint256 _value,
+    bytes _data
+  )
+    public
+    returns (bool)
+  {
+    return transferFrom(_from, _to, _value, _data, tokenFallback);
+  }
+
+  /**
+   * @dev Function to send the approved tokens
+   * @param _from address the tokens owner
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @param _data bytes the transaction metadata
+   * @param _customFallback string the fallback function name to be called
+   * @return bool the transaction state
+   */
+  function transferFrom(
+    address _from,
+    address _to,
+    uint256 _value,
+    bytes _data,
+    string _customFallback
+  )
+    public
+    returns (bool)
+  {
+    require(_from != address(0));
+    require(_to != address(0));
+    require(_value <= allowed[_from][msg.sender]);
+
+    balances[_to] = balances[_to].add(_value);
+    balances[_from] = balances[_from].sub(_value);
+    allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+    _callFallback(_from, _to, _value, _data, _customFallback);
+
+    emit Approval(_from, msg.sender, allowed[_from][msg.sender]);
+    emit Transfer(_from, _to, _value, _data);
+    return true;
+  }
+
+  function approve(address _spender, uint256 _value) public {
+    require(_spender != address(0));
+    require(_value <= balances[msg.sender]);
+    allowed[msg.sender][_spender] = _value;
+    emit Approval(msg.sender, _spender, _value);
+  }
+
+  function increaseApproval(address _spender, uint256 _value) public {
+    require(_spender != address(0));
+    require(allowed[msg.sender][_spender].add(_value) <= balances[msg.sender]);
+    allowed[msg.sender][_spender] = allowed[msg.sender][_spender].add(_value);
+    emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
+  }
+
+  function decreaseApproval(address _spender, uint256 _value) public {
+    require(_spender != address(0));
+    require(_value <= allowed[msg.sender][_spender]);
+    allowed[msg.sender][_spender] = allowed[msg.sender][_spender].sub(_value);
+    emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
+  }
+
+  function mint(address _to, uint256 _value) public onlyOwner {
+    require(_to != address(0));
+    totalSupply = totalSupply.add(_value);
+    balances[_to] = balances[_to].add(_value);
+    _callFallback(address(0), _to, _value, "0x6d696e74", tokenFallback);
+    emit Transfer(address(0), _to, _value, "0x6d696e74");
+    emit Mint(_to, _value);
+  }
+
+  function _callFallback(
+    address _from,
+    address _to,
+    uint256 _value,
+    bytes _data,
+    string _fallback
+  )
+    internal
+  {
+    if (_to.isContract()) {
+      require(_to.call.value(0)(
+        bytes4(keccak256(_fallback)),
+        _from,
+        _value,
+        _data
+      ));
+    }
+  }
+
+}
