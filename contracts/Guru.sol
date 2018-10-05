@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
  * @title GURU ERC223 token implementation
  * @author rjkz808
  */
-contract GuruInternal is ERC223, Contactable {
+contract Guru is ERC223, Contactable {
   using AddressUtils for address;
   using SafeMath for uint256;
 
