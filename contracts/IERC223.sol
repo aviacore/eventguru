@@ -3,7 +3,7 @@ pragma solidity ^0.4.9;
 /**
  * @title New ERC223 contract interface
  */
-contract ERC223 {
+contract IERC223 {
   function name() public view returns (string _name);
   function symbol() public view returns (string _symbol);
   function decimals() public view returns (uint8 _decimals);

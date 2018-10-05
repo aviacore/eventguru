@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "./ERC223.sol";
+import "./IERC223.sol";
 import "openzeppelin-solidity/contracts/ownership/Contactable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
  * @title GURU ERC223 token implementation
  * @author rjkz808
  */
-contract Guru is ERC223, Contactable {
+contract Guru is IERC223, Contactable {
   using AddressUtils for address;
   using SafeMath for uint256;
 
