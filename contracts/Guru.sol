@@ -17,7 +17,7 @@ contract Guru is ERC223, Contactable {
   string internal constant name_ = "GURU";
   string internal constant symbol_ = "GURU";
   uint8 internal constant decimals_ = 4;
-  bytes4 internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
+  string internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
   uint256 public totalSupply;
 
   mapping (address => uint256) internal balances;
@@ -246,7 +246,7 @@ contract Guru is ERC223, Contactable {
   {
     if (_to.isContract()) {
       require(_to.call.value(0)(
-        bytes4(keccak256(_fallback)),
+        bytes4(keccak256(abi.encode(_fallback))),
         _from,
         _value,
         _data
