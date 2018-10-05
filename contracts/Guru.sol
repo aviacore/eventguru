@@ -226,12 +226,12 @@ contract Guru is ERC223, Contactable {
     emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
   }
 
-  function mint(address _to, uint256 _value) public onlyOwner {
+  function mint(address _to, uint256 _value, bytes _data) public onlyOwner {
     require(_to != address(0));
     totalSupply = totalSupply.add(_value);
     balances[_to] = balances[_to].add(_value);
-    _callFallback(address(0), _to, _value, "0x6d696e74", tokenFallback);
-    emit Transfer(address(0), _to, _value, "0x6d696e74");
+    _callFallback(address(0), _to, _value, _data, tokenFallback);
+    emit Transfer(address(0), _to, _value, _data);
     emit Mint(_to, _value);
   }
 
