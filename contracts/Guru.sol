@@ -205,6 +205,11 @@ contract Guru is ERC223, Contactable {
     return true;
   }
 
+  /**
+   * @dev Function to approve an account to spend tokens
+   * @param _spender address the tokens spender
+   * @param _value uint256 amount of the tokens to be approved
+   */
   function approve(address _spender, uint256 _value) public {
     require(_spender != address(0));
     require(_value <= balances[msg.sender]);
@@ -212,6 +217,11 @@ contract Guru is ERC223, Contactable {
     emit Approval(msg.sender, _spender, _value);
   }
 
+  /**
+   * @dev Function to increase the spending tokens amount of an account
+   * @param _spender address the tokens spender
+   * @param _value uint256 amount of the tokens to be added
+   */
   function increaseApproval(address _spender, uint256 _value) public {
     require(_spender != address(0));
     require(allowed[msg.sender][_spender].add(_value) <= balances[msg.sender]);
@@ -219,6 +229,11 @@ contract Guru is ERC223, Contactable {
     emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
   }
 
+  /**
+   * @dev Function to decrease the spending tokens amount of an account
+   * @param _spender address the tokens spender
+   * @param _value uint256 amount of the tokens to be substracted
+   */
   function decreaseApproval(address _spender, uint256 _value) public {
     require(_spender != address(0));
     require(_value <= allowed[msg.sender][_spender]);
@@ -226,6 +241,12 @@ contract Guru is ERC223, Contactable {
     emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
   }
 
+  /**
+   * @dev Function to issue new tokens
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be issued
+   * @param _data bytes the transaction metadata
+   */
   function mint(address _to, uint256 _value, bytes _data) public onlyOwner {
     require(_to != address(0));
     totalSupply = totalSupply.add(_value);
@@ -235,6 +256,15 @@ contract Guru is ERC223, Contactable {
     emit Mint(_to, _value);
   }
 
+  /**
+   * @dev Internal function to call the fallback function if the tokens
+   * @dev recepient is the smart contract
+   * @param _from address the tokens owner
+   * @param _to address the tokens recepient
+   * @param _value uint256 amount of the tokens to be sent
+   * @param _data bytes the transaction metadata
+   * @param _fallback string the fallback function name to be called
+   */
   function _callFallback(
     address _from,
     address _to,
