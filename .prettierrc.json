@@ -1,16 +1,6 @@
 {
-  "overrides": [
-    {
-      "files": "*.js",
-      "options": {
-        "parser": "flow",
-        "printWidth": 100,
-        "semi": true,
-        "singleQuote": true,
-        "tabWidth": 2,
-        "trailingComma": "es5",
-        "useTabs": false
-      }
-    }
-  ]
+  "printWidth": 100,
+  "tabWidth": 4,
+  "bracketSpacing": false,
+  "singleQuote": true
 }
