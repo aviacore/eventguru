@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import contract, { contractAddress } from '../services/web3';
-import {parseNumber} from '../../test/helpers/bignumberUtils';
+import { parseNumber } from '../../test/helpers/bignumberUtils';
 
 export default class AdminPage extends Component {
   contract = contract.at(contractAddress);
 
   state = {
-    customerAddress: ''
+    customerAddress: '',
+    balance: ''
   };
 
   changeAddress = ({ target }) => {
@@ -14,11 +15,13 @@ export default class AdminPage extends Component {
     this.setState({ customerAddress: target.value });
   };
 
-  registerUser = () => {
+  checkBalance = () => {
     console.log(this.contract);
-    this.contract.balanceOf(contractAddress, function(err, res) {
-        console.log(parseNumber(res));
-        debugger;
+    this.contract.balanceOf(web3.eth.accounts[0], (err, res) => {
+      const balance = parseNumber(res);
+      console.log(balance);
+      this.setState({ balance });
+      debugger;
     });
   };
 
@@ -32,7 +35,8 @@ export default class AdminPage extends Component {
         <button>Scan qr</button>
         <input value={this.state.customerAddress} onChange={this.changeAddress} />
         <hr />
-        <button onClick={this.registerUser}>Register</button>
+        <button onClick={this.checkBalance}>Check balance</button>
+        Current Balance: {this.state.balance}
       </div>
     );
   }
