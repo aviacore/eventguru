@@ -98,21 +98,23 @@ contract('Guru', function(accounts) {
     });
 
     const transfer = function(to, data) {
-      it('decreases the balance of the tokens owner', async function() {
-        assert.equal(parseNumber(await this.token.balanceOf(accounts[0])), 0);
-      });
+      context('when successfull', function() {
+        it('decreases the balance of the tokens owner', async function() {
+          assert.equal(parseNumber(await this.token.balanceOf(accounts[0])), 0);
+        });
 
-      it('increases the balance of the tokens recepient', async function() {
-        assert.equal(parseNumber(await this.token.balanceOf(to.toString())), 1);
-      });
+        it('increases the balance of the tokens recepient', async function() {
+          assert.equal(parseNumber(await this.token.balanceOf(to.toString())), 1);
+        });
 
-      it('emits a Transfer event', async function() {
-        assert.equal(logs.length, 1);
-        assert.equal(logs[0].event, 'Transfer');
-        assert.equal(logs[0].args.from, accounts[0]);
-        assert.equal(logs[0].args.to, to);
-        assert.equal(parseNumber(logs[0].args.value), 1);
-        assert.equal(logs[0].args.data, data);
+        it('emits a Transfer event', async function() {
+          assert.equal(logs.length, 1);
+          assert.equal(logs[0].event, 'Transfer');
+          assert.equal(logs[0].args.from, accounts[0]);
+          assert.equal(logs[0].args.to, to);
+          assert.equal(parseNumber(logs[0].args.value), 1);
+          assert.equal(logs[0].args.data, data);
+        });
       });
     };
 
@@ -128,45 +130,130 @@ contract('Guru', function(accounts) {
           );
           logs = result.logs;
         });
+
         transfer(accounts[1], '0x');
+
+        context('when zero address specified', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(this.token, 'transfer', 'address,uint256', [ZERO_ADDRESS, 1], {
+                from: accounts[0]
+              })
+            );
+          });
+        });
+
+        context("when the msg.sender doesn't own the specified tokens amount", function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(this.token, 'transfer', 'address,uint256', [accounts[1], 2], {
+                from: accounts[0]
+              })
+            );
+          });
+        });
       });
 
       context('when the tokens recepient is the smart contract', function() {});
     });
 
     context('with bytes metadata', function() {
-      beforeEach('transfer tokens', async function() {
-        const result = await sendTransaction(
-          this.token,
-          'transfer',
-          'address,uint256,bytes',
-          [accounts[1], 1, TRANSFER_DATA],
-          { from: accounts[0] }
-        );
-        logs = result.logs;
-      });
-
       context('when the tokens recepient is the regular account', function() {
+        beforeEach('transfer tokens', async function() {
+          const result = await sendTransaction(
+            this.token,
+            'transfer',
+            'address,uint256,bytes',
+            [accounts[1], 1, TRANSFER_DATA],
+            { from: accounts[0] }
+          );
+          logs = result.logs;
+        });
+
         transfer(accounts[1], TRANSFER_DATA);
+
+        context('when zero address specified', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transfer',
+                'address,uint256,bytes',
+                [ZERO_ADDRESS, 1, TRANSFER_DATA],
+                {
+                  from: accounts[0]
+                }
+              )
+            );
+          });
+        });
+
+        context("when the msg.sender doesn't own the specified tokens amount", function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transfer',
+                'address,uint256,bytes',
+                [accounts[1], 2, TRANSFER_DATA],
+                {
+                  from: accounts[0]
+                }
+              )
+            );
+          });
+        });
       });
 
       context('when the tokens recepient is the smart contract', function() {});
     });
 
     context('with custom fallback', function() {
-      beforeEach('transfer tokens', async function() {
-        const result = await sendTransaction(
-          this.token,
-          'transfer',
-          'address,uint256,bytes,string',
-          [accounts[1], 1, TRANSFER_DATA, TOKEN_FALLBACK],
-          { from: accounts[0] }
-        );
-        logs = result.logs;
-      });
-
       context('when the tokens recepient is the regular account', function() {
+        beforeEach('transfer tokens', async function() {
+          const result = await sendTransaction(
+            this.token,
+            'transfer',
+            'address,uint256,bytes,string',
+            [accounts[1], 1, TRANSFER_DATA, TOKEN_FALLBACK],
+            { from: accounts[0] }
+          );
+          logs = result.logs;
+        });
+
         transfer(accounts[1], TRANSFER_DATA);
+
+        context('when zero address specified', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transfer',
+                'address,uint256,bytes,string',
+                [ZERO_ADDRESS, 1, TRANSFER_DATA, TOKEN_FALLBACK],
+                {
+                  from: accounts[0]
+                }
+              )
+            );
+          });
+        });
+
+        context("when the msg.sender doesn't own the specified tokens amount", function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transfer',
+                'address,uint256,bytes,string',
+                [accounts[1], 2, TRANSFER_DATA, TOKEN_FALLBACK],
+                {
+                  from: accounts[0]
+                }
+              )
+            );
+          });
+        });
       });
 
       context('when the tokens recepient is the smart contract', function() {});
@@ -182,45 +269,78 @@ contract('Guru', function(accounts) {
     });
 
     const transferFrom = function(to, data) {
-      it('decreases the balance of the tokens owner', async function() {
-        assert.equal(parseNumber(await this.token.balanceOf(accounts[0])), 0);
-      });
+      context('when successfull', function() {
+        it('decreases the balance of the tokens owner', async function() {
+          assert.equal(parseNumber(await this.token.balanceOf(accounts[0])), 0);
+        });
 
-      it('increases the balance of the tokens recepient', async function() {
-        assert.equal(parseNumber(await this.token.balanceOf(to.toString())), 1);
-      });
+        it('increases the balance of the tokens recepient', async function() {
+          assert.equal(parseNumber(await this.token.balanceOf(to.toString())), 1);
+        });
 
-      it('decreases the approval', async function() {
-        assert.equal(parseNumber(await this.token.allowance(accounts[0], accounts[1])), 0);
-      });
+        it('decreases the approval', async function() {
+          assert.equal(parseNumber(await this.token.allowance(accounts[0], accounts[1])), 0);
+        });
 
-      it('emits an Approval event', async function() {
-        assert.equal(logs.length, 2);
-        assert.equal(logs[0].event, 'Approval');
-        assert.equal(logs[0].args.owner, accounts[0]);
-        assert.equal(logs[0].args.spender, accounts[1]);
-        assert.equal(parseNumber(logs[0].args.value), 0);
-      });
+        it('emits an Approval event', async function() {
+          assert.equal(logs.length, 2);
+          assert.equal(logs[0].event, 'Approval');
+          assert.equal(logs[0].args.owner, accounts[0]);
+          assert.equal(logs[0].args.spender, accounts[1]);
+          assert.equal(parseNumber(logs[0].args.value), 0);
+        });
 
-      it('emits a Transfer event', async function() {
-        assert.equal(logs.length, 2);
-        assert.equal(logs[1].event, 'Transfer');
-        assert.equal(logs[1].args.from, accounts[0]);
-        assert.equal(logs[1].args.to, to);
-        assert.equal(parseNumber(logs[1].args.value), 1);
-        assert.equal(logs[1].args.data, data);
+        it('emits a Transfer event', async function() {
+          assert.equal(logs.length, 2);
+          assert.equal(logs[1].event, 'Transfer');
+          assert.equal(logs[1].args.from, accounts[0]);
+          assert.equal(logs[1].args.to, to);
+          assert.equal(parseNumber(logs[1].args.value), 1);
+          assert.equal(logs[1].args.data, data);
+        });
       });
     };
 
     context('ERC20-compatible', function() {
-      context('when the tokens recepient is the regular account', function() {
+      context('when the tokens recepient is a regular account', function() {
         beforeEach('transfer tokens', async function() {
           const result = await this.token.transferFrom(accounts[0], accounts[1], 1, {
             from: accounts[1]
           });
           logs = result.logs;
         });
+
         transferFrom(accounts[1], '0x');
+
+        context('when zero address specified as a tokens owner', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              this.token.transferFrom(ZERO_ADDRESS, accounts[1], 1, {
+                from: accounts[1]
+              })
+            );
+          });
+        });
+
+        context('when zero address specified as a tokens recepient', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              this.token.transferFrom(accounts[0], ZERO_ADDRESS, 1, {
+                from: accounts[1]
+              })
+            );
+          });
+        });
+
+        context('when the msg.sender is not allowed to spend the specified tokens amount', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              this.token.transferFrom(accounts[0], accounts[1], 2, {
+                from: accounts[1]
+              })
+            );
+          });
+        });
       });
 
       context('when the tokens recepient is the smart contract', function() {});
@@ -238,10 +358,53 @@ contract('Guru', function(accounts) {
           );
           logs = result.logs;
         });
+
         transferFrom(accounts[1], TRANSFER_DATA);
+
+        context('when zero address specified as a tokens owner', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes',
+                [ZERO_ADDRESS, accounts[1], 1, TRANSFER_DATA],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
+
+        context('when zero address specified as a tokens recepient', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes',
+                [accounts[0], ZERO_ADDRESS, 1, TRANSFER_DATA],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
+
+        context('when the msg.sender is not allowed to spend the specified tokens amount', function() {
+          it('reverts', async function() {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes',
+                [accounts[0], accounts[1], 2, TRANSFER_DATA],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
       });
 
-      context('when the tokens recepient is the smart contract', function() {});
+      context('when the tokens recepient is a smart contract', function() {});
     });
 
     context('with custom fallback', function() {
@@ -256,7 +419,50 @@ contract('Guru', function(accounts) {
           );
           logs = result.logs;
         });
+
         transferFrom(accounts[1], TRANSFER_DATA);
+
+        context('when zero address specified as a tokens owner', function () {
+          it('reverts', async function () {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes,string',
+                [ZERO_ADDRESS, accounts[1], 1, TRANSFER_DATA, TOKEN_FALLBACK],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
+
+        context('when zero address specified as a tokens recepient', function () {
+          it('reverts', async function () {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes,string',
+                [accounts[0], ZERO_ADDRESS, 1, TRANSFER_DATA, TOKEN_FALLBACK],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
+
+        context('when the msg.sender is not allowed to spend the specified tokens amount', function () {
+          it('reverts', async function () {
+            await assertRevert(
+              sendTransaction(
+                this.token,
+                'transferFrom',
+                'address,address,uint256,bytes,string',
+                [accounts[0], accounts[1], 2, TRANSFER_DATA, TOKEN_FALLBACK],
+                { from: accounts[1] }
+              )
+            );
+          });
+        });
       });
 
       context('when the tokens recepient is the smart contract', function() {});
