@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import contract, { contractAddress } from '../services/web3';
+import contract from '../services/guruContract';
 import { parseNumber } from '../../test/helpers/bignumberUtils';
+import Scanner from '../services/Scanner.jsx';
+import img from '../assets/logo.png';
 
 export default class AdminPage extends Component {
-  contract = contract.at(contractAddress);
-
   state = {
     customerAddress: '',
-    balance: ''
+    balance: '',
+    isScanActive: false
   };
 
   changeAddress = ({ target }) => {
@@ -16,8 +17,8 @@ export default class AdminPage extends Component {
   };
 
   checkBalance = () => {
-    console.log(this.contract);
-    this.contract.balanceOf(web3.eth.accounts[0], (err, res) => {
+    console.log(contract);
+    contract.balanceOf(web3.eth.accounts[0], (err, res) => {
       const balance = parseNumber(res);
       console.log(balance);
       this.setState({ balance });
@@ -25,17 +26,24 @@ export default class AdminPage extends Component {
     });
   };
 
+  handleScan = customerAddress => {
+    this.setState({ customerAddress, isScanActive: false });
+  };
+
   componentDidMount() {}
 
   render() {
     return (
       <div>
+        <img src={img} />
         <div>Admin page</div>
         <hr />
-        <button>Scan qr</button>
+        <button onClick={() => this.setState({ isScanActive: true })}>Scan qr</button>
+        {this.state.isScanActive && <Scanner handleScan={this.handleScan} />}
         <input value={this.state.customerAddress} onChange={this.changeAddress} />
         <hr />
         <button onClick={this.checkBalance}>Check balance</button>
+        <hr />
         Current Balance: {this.state.balance}
       </div>
     );
