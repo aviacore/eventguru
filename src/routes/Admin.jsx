@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import contract, { contractAddress } from '../services/web3';
+import {parseNumber} from '../../test/helpers/bignumberUtils';
 
 export default class AdminPage extends Component {
   contract = contract.at(contractAddress);
@@ -15,13 +16,13 @@ export default class AdminPage extends Component {
 
   registerUser = () => {
     console.log(this.contract);
+    this.contract.balanceOf(contractAddress, function(err, res) {
+        console.log(parseNumber(res));
+        debugger;
+    });
   };
 
-  componentDidMount() {
-    this.contract.balanceOf('0x6C9462784D2bB30BB4D4e12eEa66dda950991259', (err, res) => {
-      debugger;
-    });
-  }
+  componentDidMount() {}
 
   render() {
     return (

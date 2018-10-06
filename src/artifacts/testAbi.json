@@ -1,38 +1,24 @@
 {
-    "address":"0x79d2fce17c07fb08b4c313063ed96f248e63afde",
-    "abi":[
+  "address": "0x87474339a5AEC09A6A5a19F3cA6a182dC454dEB9",
+  "abi": [
     {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_newBalance",
-                "type": "uint256"
-            }
-        ],
-        "name": "setBalance",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_who",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_who",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     }
-]
+  ]
 }
