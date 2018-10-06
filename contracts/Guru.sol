@@ -19,6 +19,7 @@ contract Guru is IERC223, Contactable {
   uint8 internal constant decimals_ = 0;
   string internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
   uint256 public totalSupply;
+  address public teamFund = 0x78985513774E653f31018da5F972226BEbb472C5;
 
   mapping (address => uint256) internal balances;
   mapping (address => mapping (address => uint256)) internal allowed;
@@ -28,7 +29,7 @@ contract Guru is IERC223, Contactable {
     address indexed spender,
     uint256 value
   );
-  event Mint(address indexed to, uint256 value);
+  event Mint(address indexed to, uint256 amount);
 
   /**
    * @dev Gets the token name
@@ -243,16 +244,13 @@ contract Guru is IERC223, Contactable {
 
   /**
    * @dev Function to issue new tokens
-   * @param _to address the tokens recepient
    * @param _value uint256 amount of the tokens to be issued
    */
-  function mint(address _to, uint256 _value) public onlyOwner {
-    require(_to != address(0));
-    require(!_to.isContract());
+  function mint(uint256 _value) public onlyOwner {
     totalSupply = totalSupply.add(_value);
-    balances[_to] = balances[_to].add(_value);
-    emit Transfer(address(0), _to, _value, "");
-    emit Mint(_to, _value);
+    balances[owner] = balances[owner].add(_value);
+    transfer(teamFund, _value.div(100).mul(5));
+    emit Mint(owner, _value);
   }
 
   /**

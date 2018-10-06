@@ -35,7 +35,7 @@ contract('Guru', function(accounts) {
 
   describe('balanceOf', function() {
     beforeEach('mint a token', async function() {
-      await this.token.mint(accounts[0], 1, { from: creator });
+      await this.token.mint(1, { from: creator });
     });
 
     context('when the specified address owns some tokens', function() {
@@ -59,7 +59,7 @@ contract('Guru', function(accounts) {
 
   describe('allowance', function() {
     beforeEach('mint and approve a token', async function() {
-      await this.token.mint(accounts[0], 1, { from: creator });
+      await this.token.mint(1, { from: creator });
       await this.token.approve(accounts[1], 1, { from: accounts[0] });
     });
 
@@ -92,7 +92,7 @@ contract('Guru', function(accounts) {
     let logs;
 
     beforeEach('mint tokens', async function() {
-      await this.token.mint(accounts[0], 1, { from: creator });
+      await this.token.mint(1, { from: creator });
     });
 
     const transfer = function(to, data) {
@@ -115,12 +115,17 @@ contract('Guru', function(accounts) {
     };
 
     context('ERC20-compatible', function() {
-      beforeEach('transfer tokens', async function() {
-        const result = await this.token.transfer(accounts[1], 1, { from: accounts[0] });
-        logs = result.logs;
-      });
-
       context('when the tokens recepient is the regular account', function() {
+        beforeEach('transfer tokens', async function() {
+          const result = await sendTransaction(
+            this.token,
+            'transfer',
+            'address,uint256',
+            [accounts[1], 1],
+            { from: accounts[0] }
+          );
+          logs = result.logs;
+        });
         transfer(accounts[1], '0x');
       });
 
@@ -170,7 +175,7 @@ contract('Guru', function(accounts) {
     let logs;
 
     beforeEach('mint tokens', async function() {
-      await this.token.mint(accounts[0], 1, { from: creator });
+      await this.token.mint(1, { from: creator });
       await this.token.approve(accounts[1], 1, { from: accounts[0] });
     });
 
@@ -253,6 +258,62 @@ contract('Guru', function(accounts) {
       });
 
       context('when the tokens recepient is the smart contract', function() {});
+    });
+  });
+
+  describe('approve', function() {
+    let logs;
+
+    const approve = function(state, value) {
+      it(state + ' the approval value to ' + value.toString(), async function() {
+        assert.equal(parseNumber(await this.token.allowance(accounts[0], accounts[1])), value);
+      });
+
+      it('emits an Approval event', async function() {
+        assert.equal(logs.length, 1);
+        assert.equal(logs[0].event, 'Approval');
+        assert.equal(logs[0].args.owner, accounts[0]);
+        assert.equal(logs[0].args.spender, accounts[1]);
+        assert.equal(parseNumber(logs[0].args.value), value);
+      });
+    };
+
+    beforeEach('mint tokens', async function() {
+      await this.token.mint(1, { from: creator });
+    });
+
+    context('set', function() {
+      beforeEach('approve tokens', async function() {
+        const result = await this.token.approve(accounts[1], 1, { from: accounts[0] });
+        logs = result.logs;
+      });
+
+      context('when successfull', function() {
+        approve('sets', 1);
+      });
+    });
+
+    context('increase', function() {
+      beforeEach('approve tokens', async function() {
+        const result = await this.token.increaseApproval(accounts[1], 1, { from: accounts[0] });
+        logs = result.logs;
+      });
+
+      context('when successfull', function() {
+        approve('increases', 1);
+      });
+    });
+
+    context('decrease', function() {
+      beforeEach('approve tokens', async function() {
+        await this.token.approve(accounts[1], 1, { from: accounts[0] });
+        const result = await this.token.decreaseApproval(accounts[1], 1, { from: accounts[0] });
+        logs = result.logs;
+      });
+
+      context('when successfull', function() {
+        approve('decreases', 0);
+      });
     });
   });
 });
