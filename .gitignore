@@ -63,3 +63,10 @@ typings/
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/misc.xml
+.idea/eventguru.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
