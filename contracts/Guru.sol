@@ -16,7 +16,7 @@ contract Guru is IERC223, Contactable {
 
   string internal constant name_ = "GURU";
   string internal constant symbol_ = "GURU";
-  uint8 internal constant decimals_ = 4;
+  uint8 internal constant decimals_ = 0;
   string internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
   uint256 public totalSupply;
 
