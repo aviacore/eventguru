@@ -1,9 +1,6 @@
-import React from 'react'
-import {render} from 'react-dom'
-import Hot from './hot.jsx'
-import '../styles/index.scss'
+import React from 'react';
+import {render} from 'react-dom';
+import Routes from './routes.jsx';
+import '../styles/index.scss';
 
-render(
-    <Hot/>,
-    document.querySelector('#root')
-);
+render(<Routes />, document.querySelector('#root'));
