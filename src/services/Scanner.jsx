@@ -7,6 +7,10 @@ export default class Test extends Component {
     result: 'No result'
   };
 
+  static handleError(err) {
+    console.error(err);
+  }
+
   handleScan = data => {
     if (data) {
       this.setState({
@@ -14,20 +18,14 @@ export default class Test extends Component {
       });
       this.props.handleScan(data);
     }
-
-
   };
-
-  handleError(err) {
-    console.error(err);
-  }
 
   render() {
     return (
       <div>
         <QrReader
           delay={this.state.delay}
-          onError={this.handleError}
+          onError={Test.handleError}
           onScan={this.handleScan}
           style={{ width: '100%' }}
         />

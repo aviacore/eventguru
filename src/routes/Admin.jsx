@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import contract from '../services/guruContract';
-import { parseNumber } from '../../test/helpers/bignumberUtils';
+import contract, { balanceOf } from '../services/guruContract';
 import Scanner from '../services/Scanner.jsx';
 import img from '../assets/logo.png';
 
@@ -16,14 +15,11 @@ export default class AdminPage extends Component {
     this.setState({ customerAddress: target.value });
   };
 
-  checkBalance = () => {
-    console.log(contract);
-    contract.balanceOf(web3.eth.accounts[0], (err, res) => {
-      const balance = parseNumber(res);
-      console.log(balance);
-      this.setState({ balance });
-      debugger;
-    });
+  checkBalance = async () => {
+    const balance = await balanceOf();
+    console.log(balance);
+    this.setState({ balance });
+    debugger;
   };
 
   handleScan = customerAddress => {

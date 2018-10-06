@@ -1,6 +1,11 @@
 import testdata from '../artifacts/gurutAbi.json';
 import { parseNumber } from '../../test/helpers/bignumberUtils';
 
+const promisify = inner => (...args) =>
+  new Promise((resolve, reject) =>
+    inner(...args, (err, res) => (err ? reject(err) : resolve(res)))
+  );
+
 // if (typeof web3 === 'undefined') {
 //     web3 = new Web3(web3.currentProvider);
 // } else {
@@ -11,7 +16,29 @@ web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 web3.eth.defaultAccount = web3.eth.accounts[0];
 
 export const contractAddress = testdata.address;
-export default web3.eth.contract(testdata.abi).at(contractAddress);
+const contract = web3.eth.contract(testdata.abi).at(contractAddress);
+console.log(contract);
+
+export default contract;
+
+const functionNames = Object.keys(contract);
+
+const contractFunctions = functionNames.reduce((res, funcName) => {
+  const func = contract[funcName];
+  if (typeof func === 'function') {
+    res[funcName] = promisify(func);
+  }
+
+  return res;
+}, {});
+
+export const balanceOf = (address = web3.eth.accounts[0]) =>
+  contractFunctions.balanceOf(address).then(parseNumber);
+
+// symbol: ƒ () string
+// name: ƒ () string
+// decimals: ƒ () number
+// totalSupply: ƒ () number
 
 // Approval: ƒ ()
 // Mint: ƒ ()
@@ -23,24 +50,13 @@ export default web3.eth.contract(testdata.abi).at(contractAddress);
 // allEvents: ƒ ()
 // allowance: ƒ ()
 // approve: ƒ ()
-export const balanceOf = (address = web3.eth.accounts[0]) => {
-  return new Promise((resolve, reject) => {
-    contract.balanceOf(address, (err, res) => {
-      err ? reject(err) : resolve(parseNumber(res));
-    });
-  });
-};
 // contactInformation: ƒ ()
-// decimals: ƒ ()
 // decreaseApproval: ƒ ()
 // increaseApproval: ƒ ()
 // mint: ƒ ()
-// name: ƒ ()
 // owner: ƒ ()
 // renounceOwnership: ƒ ()
 // setContactInformation: ƒ ()
-// symbol: ƒ ()
-// totalSupply: ƒ ()
 // transactionHash: null
 // transfer: ƒ ()
 // transferFrom: ƒ ()
