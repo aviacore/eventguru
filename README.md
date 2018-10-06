@@ -1,4 +1,4 @@
-# EventGuru
+# 🎉 EventGuru 🎉
 
 Our idea is to develop a decentralized event rating accounting application on the blockchain technology
 
