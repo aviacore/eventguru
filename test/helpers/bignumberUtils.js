@@ -7,5 +7,5 @@ module.exports = {
   parseNumber,
   parseString,
   parseJSON,
-  parseObject,
+  parseObject
 };

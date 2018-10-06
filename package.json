@@ -19,7 +19,8 @@
     "react-dom": "^16.4.2",
     "react-router-dom": "^4.3.1",
     "readline-sync": "^1.4.9",
-    "truffle-hdwallet-provider": "0.0.6"
+    "truffle-hdwallet-provider": "0.0.6",
+    "web3": "github:ethereum/web3.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
