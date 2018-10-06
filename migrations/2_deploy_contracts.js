@@ -1,5 +1,5 @@
-const Test = artifacts.require('Test');
+const Guru = artifacts.require('Guru');
 
 module.exports = function(deployer) {
-  deployer.deploy(Test);
+  deployer.deploy(Guru);
 };

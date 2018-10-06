@@ -245,14 +245,13 @@ contract Guru is IERC223, Contactable {
    * @dev Function to issue new tokens
    * @param _to address the tokens recepient
    * @param _value uint256 amount of the tokens to be issued
-   * @param _data bytes the transaction metadata
    */
-  function mint(address _to, uint256 _value, bytes _data) public onlyOwner {
+  function mint(address _to, uint256 _value) public onlyOwner {
     require(_to != address(0));
+    require(!_to.isContract());
     totalSupply = totalSupply.add(_value);
     balances[_to] = balances[_to].add(_value);
-    _callFallback(address(0), _to, _value, _data, tokenFallback);
-    emit Transfer(address(0), _to, _value, _data);
+    emit Transfer(address(0), _to, _value, "");
     emit Mint(_to, _value);
   }
 

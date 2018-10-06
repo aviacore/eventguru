@@ -24,6 +24,6 @@ contract IERC223 {
     address indexed from,
     address indexed to,
     uint256 value,
-    bytes indexed data
+    bytes data
   );
 }
