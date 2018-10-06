@@ -332,15 +332,18 @@ contract('Guru', function(accounts) {
           });
         });
 
-        context('when the msg.sender is not allowed to spend the specified tokens amount', function() {
-          it('reverts', async function() {
-            await assertRevert(
-              this.token.transferFrom(accounts[0], accounts[1], 2, {
-                from: accounts[1]
-              })
-            );
-          });
-        });
+        context(
+          'when the msg.sender is not allowed to spend the specified tokens amount',
+          function() {
+            it('reverts', async function() {
+              await assertRevert(
+                this.token.transferFrom(accounts[0], accounts[1], 2, {
+                  from: accounts[1]
+                })
+              );
+            });
+          }
+        );
       });
 
       context('when the tokens recepient is the smart contract', function() {});
@@ -389,19 +392,22 @@ contract('Guru', function(accounts) {
           });
         });
 
-        context('when the msg.sender is not allowed to spend the specified tokens amount', function() {
-          it('reverts', async function() {
-            await assertRevert(
-              sendTransaction(
-                this.token,
-                'transferFrom',
-                'address,address,uint256,bytes',
-                [accounts[0], accounts[1], 2, TRANSFER_DATA],
-                { from: accounts[1] }
-              )
-            );
-          });
-        });
+        context(
+          'when the msg.sender is not allowed to spend the specified tokens amount',
+          function() {
+            it('reverts', async function() {
+              await assertRevert(
+                sendTransaction(
+                  this.token,
+                  'transferFrom',
+                  'address,address,uint256,bytes',
+                  [accounts[0], accounts[1], 2, TRANSFER_DATA],
+                  { from: accounts[1] }
+                )
+              );
+            });
+          }
+        );
       });
 
       context('when the tokens recepient is a smart contract', function() {});
@@ -422,8 +428,8 @@ contract('Guru', function(accounts) {
 
         transferFrom(accounts[1], TRANSFER_DATA);
 
-        context('when zero address specified as a tokens owner', function () {
-          it('reverts', async function () {
+        context('when zero address specified as a tokens owner', function() {
+          it('reverts', async function() {
             await assertRevert(
               sendTransaction(
                 this.token,
@@ -436,8 +442,8 @@ contract('Guru', function(accounts) {
           });
         });
 
-        context('when zero address specified as a tokens recepient', function () {
-          it('reverts', async function () {
+        context('when zero address specified as a tokens recepient', function() {
+          it('reverts', async function() {
             await assertRevert(
               sendTransaction(
                 this.token,
@@ -450,19 +456,22 @@ contract('Guru', function(accounts) {
           });
         });
 
-        context('when the msg.sender is not allowed to spend the specified tokens amount', function () {
-          it('reverts', async function () {
-            await assertRevert(
-              sendTransaction(
-                this.token,
-                'transferFrom',
-                'address,address,uint256,bytes,string',
-                [accounts[0], accounts[1], 2, TRANSFER_DATA, TOKEN_FALLBACK],
-                { from: accounts[1] }
-              )
-            );
-          });
-        });
+        context(
+          'when the msg.sender is not allowed to spend the specified tokens amount',
+          function() {
+            it('reverts', async function() {
+              await assertRevert(
+                sendTransaction(
+                  this.token,
+                  'transferFrom',
+                  'address,address,uint256,bytes,string',
+                  [accounts[0], accounts[1], 2, TRANSFER_DATA, TOKEN_FALLBACK],
+                  { from: accounts[1] }
+                )
+              );
+            });
+          }
+        );
       });
 
       context('when the tokens recepient is the smart contract', function() {});
@@ -473,16 +482,18 @@ contract('Guru', function(accounts) {
     let logs;
 
     const approve = function(state, value) {
-      it(state + ' the approval value to ' + value.toString(), async function() {
-        assert.equal(parseNumber(await this.token.allowance(accounts[0], accounts[1])), value);
-      });
+      context('when successfull', function() {
+        it(state + ' the approval value to ' + value.toString(), async function() {
+          assert.equal(parseNumber(await this.token.allowance(accounts[0], accounts[1])), value);
+        });
 
-      it('emits an Approval event', async function() {
-        assert.equal(logs.length, 1);
-        assert.equal(logs[0].event, 'Approval');
-        assert.equal(logs[0].args.owner, accounts[0]);
-        assert.equal(logs[0].args.spender, accounts[1]);
-        assert.equal(parseNumber(logs[0].args.value), value);
+        it('emits an Approval event', async function() {
+          assert.equal(logs.length, 1);
+          assert.equal(logs[0].event, 'Approval');
+          assert.equal(logs[0].args.owner, accounts[0]);
+          assert.equal(logs[0].args.spender, accounts[1]);
+          assert.equal(parseNumber(logs[0].args.value), value);
+        });
       });
     };
 
@@ -496,8 +507,18 @@ contract('Guru', function(accounts) {
         logs = result.logs;
       });
 
-      context('when successfull', function() {
-        approve('sets', 1);
+      approve('sets', 1);
+
+      context('when zero address specified', function() {
+        it('reverts', async function() {
+          await assertRevert(this.token.approve(ZERO_ADDRESS, 1, { from: accounts[0] }));
+        });
+      });
+
+      context('when the msg.sender doesn\'t own the specified tokens amount', function() {
+        it('reverts', async function() {
+          await assertRevert(this.token.approve(accounts[1], 2, { from: accounts[0] }));
+        });
       });
     });
 
@@ -507,8 +528,22 @@ contract('Guru', function(accounts) {
         logs = result.logs;
       });
 
-      context('when successfull', function() {
-        approve('increases', 1);
+      approve('increases', 1);
+
+      context('when zero address specified', function () {
+        it('reverts', async function () {
+          await assertRevert(this.token.increaseApproval(ZERO_ADDRESS, 1, {
+            from: accounts[0]
+          }));
+        });
+      });
+
+      context('when the msg.sender doesn\'t own the exists approval + specified tokens amount', function () {
+        it('reverts', async function () {
+          await assertRevert(this.token.increaseApproval(accounts[1], 2, {
+            from: accounts[0]
+          }));
+        });
       });
     });
 
@@ -519,9 +554,26 @@ contract('Guru', function(accounts) {
         logs = result.logs;
       });
 
-      context('when successfull', function() {
-        approve('decreases', 0);
+      approve('decreases', 0);
+
+      context('when zero address specified', function() {
+        it('reverts', async function() {
+          await assertRevert(this.token.decreaseApproval(ZERO_ADDRESS, 1, {
+            from: accounts[0]
+          }));
+        });
       });
+
+      context(
+        "when the specified subtract value is bigger than the exists approval",
+        function() {
+          it('reverts', async function() {
+            await assertRevert(this.token.decreaseApproval(accounts[1], 2, {
+              from: accounts[0]
+            }));
+          });
+        }
+      );
     });
   });
 
