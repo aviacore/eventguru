@@ -30,6 +30,10 @@ contract('Guru', function(accounts) {
       assert.equal(parseNumber(await this.token.decimals()), 0);
     });
 
+    it('creates empty administrators array', async function() {
+      assert.equal(parseJSON(await this.token.getAdmins()), '[]');
+    });
+
     it("doesn't issue initial tokens", async function() {
       assert.equal(parseNumber(await this.token.totalSupply()), 0);
     });
@@ -515,7 +519,7 @@ contract('Guru', function(accounts) {
         });
       });
 
-      context('when the msg.sender doesn\'t own the specified tokens amount', function() {
+      context("when the msg.sender doesn't own the specified tokens amount", function() {
         it('reverts', async function() {
           await assertRevert(this.token.approve(accounts[1], 2, { from: accounts[0] }));
         });
@@ -530,21 +534,28 @@ contract('Guru', function(accounts) {
 
       approve('increases', 1);
 
-      context('when zero address specified', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.increaseApproval(ZERO_ADDRESS, 1, {
-            from: accounts[0]
-          }));
+      context('when zero address specified', function() {
+        it('reverts', async function() {
+          await assertRevert(
+            this.token.increaseApproval(ZERO_ADDRESS, 1, {
+              from: accounts[0]
+            })
+          );
         });
       });
 
-      context('when the msg.sender doesn\'t own the exists approval + specified tokens amount', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.increaseApproval(accounts[1], 2, {
-            from: accounts[0]
-          }));
-        });
-      });
+      context(
+        "when the msg.sender doesn't own the exists approval + specified tokens amount",
+        function() {
+          it('reverts', async function() {
+            await assertRevert(
+              this.token.increaseApproval(accounts[1], 2, {
+                from: accounts[0]
+              })
+            );
+          });
+        }
+      );
     });
 
     context('decrease', function() {
@@ -558,22 +569,23 @@ contract('Guru', function(accounts) {
 
       context('when zero address specified', function() {
         it('reverts', async function() {
-          await assertRevert(this.token.decreaseApproval(ZERO_ADDRESS, 1, {
-            from: accounts[0]
-          }));
+          await assertRevert(
+            this.token.decreaseApproval(ZERO_ADDRESS, 1, {
+              from: accounts[0]
+            })
+          );
         });
       });
 
-      context(
-        "when the specified subtract value is bigger than the exists approval",
-        function() {
-          it('reverts', async function() {
-            await assertRevert(this.token.decreaseApproval(accounts[1], 2, {
+      context('when the specified subtract value is bigger than the exists approval', function() {
+        it('reverts', async function() {
+          await assertRevert(
+            this.token.decreaseApproval(accounts[1], 2, {
               from: accounts[0]
-            }));
-          });
-        }
-      );
+            })
+          );
+        });
+      });
     });
   });
 
@@ -614,6 +626,36 @@ contract('Guru', function(accounts) {
         assert.equal(logs[1].event, 'Mint');
         assert.equal(logs[1].args.to, creator);
         assert.equal(parseNumber(logs[1].args.amount), 100);
+      });
+    });
+
+    context('when the msg.sender isn\'t owner', function () {
+      it('reverts', async function () {
+        await assertRevert(this.token.mint(100, { from: accounts[1] }));
+      });
+    });
+  });
+
+  describe('addAdmin', function() {
+    beforeEach('mint tokens', async function() {
+      await this.token.addAdmin(accounts[4], { from: creator });
+    });
+
+    context('when successfull', function() {
+      it('adds an administrator address to the admins array', async function() {
+        assert.equal(parseJSON(await this.token.getAdmins()), '["' + accounts[4] + '"]');
+      });
+    });
+
+    context('when zero address specified', function() {
+      it('reverts', async function() {
+        await assertRevert(this.token.addAdmin(ZERO_ADDRESS, { from: creator }));
+      });
+    });
+
+    context('when the msg.sender isn\'t owner', function() {
+      it('reverts', async function() {
+        await assertRevert(this.token.addAdmin(accounts[4], { from: accounts[1] }));
       });
     });
   });

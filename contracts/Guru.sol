@@ -20,6 +20,7 @@ contract Guru is IERC223, Contactable {
   string internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
   uint256 public totalSupply;
   address public teamFund;
+  address[] public admins;
 
   mapping (address => uint256) internal balances;
   mapping (address => mapping (address => uint256)) internal allowed;
@@ -91,6 +92,14 @@ contract Guru is IERC223, Contactable {
     require(_owner != address(0));
     require(_spender != address(0));
     return allowed[_owner][_spender];
+  }
+
+  /**
+   * @dev Function to get the all administrators list
+   * @return address[] the administrators list
+   */
+  function getAdmins() public view returns (address[]) {
+    return admins;
   }
 
   /**
@@ -260,6 +269,15 @@ contract Guru is IERC223, Contactable {
     balances[owner] = balances[owner].add(_value);
     transfer(teamFund, _value.div(100).mul(5));
     emit Mint(owner, _value);
+  }
+
+  /**
+   * @dev Function to add a new account to the admins list
+   * @param _admin address the administrator
+   */
+  function addAdmin(address _admin) public onlyOwner {
+    require(_admin != address(0));
+    admins.push(_admin);
   }
 
   /**
