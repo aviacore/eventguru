@@ -31,6 +31,10 @@ contract Guru is IERC223, Contactable {
   );
   event Mint(address indexed to, uint256 amount);
 
+  /**
+   * @dev Constructor sets the initial contract parameters
+   * @param _teamFund address the team fund
+   */
   constructor(address _teamFund) public {
     require(_teamFund != address(0));
     teamFund = _teamFund;
