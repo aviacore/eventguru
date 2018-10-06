@@ -19,7 +19,7 @@ contract Guru is IERC223, Contactable {
   uint8 internal constant decimals_ = 0;
   string internal constant tokenFallback = "tokenFallback(address,uint256,bytes)";
   uint256 public totalSupply;
-  address public teamFund = 0x78985513774E653f31018da5F972226BEbb472C5;
+  address public teamFund;
 
   mapping (address => uint256) internal balances;
   mapping (address => mapping (address => uint256)) internal allowed;
@@ -30,6 +30,11 @@ contract Guru is IERC223, Contactable {
     uint256 value
   );
   event Mint(address indexed to, uint256 amount);
+
+  constructor(address _teamFund) public {
+    require(_teamFund != address(0));
+    teamFund = _teamFund;
+  }
 
   /**
    * @dev Gets the token name

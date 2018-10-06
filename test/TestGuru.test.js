@@ -9,10 +9,12 @@ contract('Guru', function(accounts) {
   const TRANSFER_DATA = web3.toHex('test');
   const TOKEN_FALLBACK = 'tokenFallback(address,uint256,bytes)';
   const creator = accounts[0];
+  const teamFund = accounts[3];
+
   let token;
 
   beforeEach('create a new token contract instance', async function() {
-    this.token = await Guru.new({ from: creator });
+    this.token = await Guru.new(accounts[3], { from: creator });
   });
 
   describe('initial', function() {
@@ -261,7 +263,7 @@ contract('Guru', function(accounts) {
     });
   });
 
-  describe('approve', function() {
+  describe('approval', function() {
     let logs;
 
     const approve = function(state, value) {
@@ -313,6 +315,47 @@ contract('Guru', function(accounts) {
 
       context('when successfull', function() {
         approve('decreases', 0);
+      });
+    });
+  });
+
+  describe('mint', function() {
+    let logs;
+
+    beforeEach('mint tokens', async function() {
+      const result = await this.token.mint(100, { from: creator });
+      logs = result.logs;
+    });
+
+    context('when successfull', function() {
+      it('increases the total supply', async function() {
+        assert.equal(parseNumber(await this.token.totalSupply()), 100);
+      });
+
+      it('increases the balance of the minter', async function() {
+        assert.equal(parseNumber(await this.token.balanceOf(creator)), 95);
+      });
+
+      it('transfers the team percent to the teamFund', async function() {
+        it('increases the balance of the team fund', async function() {
+          assert.equal(parseNumber(await this.token.balanceOf(teamFund)), 1);
+        });
+
+        it('emits a Transfer event', async function() {
+          assert.equal(logs.length, 2);
+          assert.equal(logs[0].event, 'Transfer');
+          assert.equal(logs[0].args.from, creator);
+          assert.equal(logs[0].args.to, teamFund);
+          assert.equal(parseNumber(logs[0].args.value), 5);
+          assert.equal(logs[0].args.data, '0x');
+        });
+      });
+
+      it('emits a Mint event', async function() {
+        assert.equal(logs.length, 2);
+        assert.equal(logs[1].event, 'Mint');
+        assert.equal(logs[1].args.to, creator);
+        assert.equal(parseNumber(logs[1].args.amount), 100);
       });
     });
   });
