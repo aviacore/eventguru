@@ -10,7 +10,7 @@ contract IERC223 {
   function totalSupply() public view returns (uint256 _supply);
   function balanceOf(address who) public view returns (uint256);
 
-  function transfer(address to, uint256 value) public returns (bool ok);
+  // function transfer(address to, uint256 value) public returns (bool ok);
   function transfer(address to, uint256 value, bytes data)
     public returns (bool ok);
   function transfer(

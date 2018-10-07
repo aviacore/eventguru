@@ -108,9 +108,9 @@ contract Guru is IERC223, Contactable {
    * @param _value uint256 amount of the tokens to be sent
    * @return bool the transaction state
    */
-  function transfer(address _to, uint256 _value) public returns (bool) {
-    return transfer(_to, _value, "");
-  }
+  // function transfer(address _to, uint256 _value) public returns (bool) {
+  //   return transfer(_to, _value, "");
+  // }
 
   /**
    * @dev Function to send tokens
