@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
+@import url('https://fonts.googleapis.com/css?family=Rubik');
 
 $stockPadding: 2vw;
 $shadow: 1px 1px 10px rgba(150, 150, 150, 0.3);
@@ -14,7 +14,7 @@ body {
 
 * {
   font-size: 20pt;
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: 'Rubik', sans-serif;
   color: black;
   -webkit-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
@@ -97,6 +97,9 @@ body {
     max-width: 20vw;
     max-height: 20vw;
   }
+    .button-send{
+        font-size: 1.5rem;
+    }
 
   .tooltip {
     position: absolute;
@@ -138,6 +141,9 @@ body {
       background-position: 50% 35vh;
     }
   }
+    .b-l-2{
+        background-size: 115%;
+    }
 
   @keyframes float {
     0% {
@@ -228,15 +234,6 @@ body {
         flex-flow: column;
         justify-content: center;
         align-items: center;
-      }
-      .name .icon > img {
-        filter: hue-rotate(30deg);
-      }
-      .limit .icon > img {
-        filter: hue-rotate(60deg);
-      }
-      .tokens .icon > img {
-        filter: hue-rotate(90deg);
       }
       .icon {
         img {
