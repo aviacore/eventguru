@@ -1,5 +1,6 @@
 {
-  "address": "0x87474339a5aec09a6a5a19f3ca6a182dc454deb9",
+  "contractName": "Guru",
+  "address": "0x359e0Bd9A705FF38dD57F8fb75B80fe0CbBC52F7",
   "abi": [
     {
       "constant": true,

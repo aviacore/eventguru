@@ -1,328 +1,329 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 
-
 $stockPadding: 2vw;
-$shadow: 1px 1px 10px rgba(150,150,150,.3);
+$shadow: 1px 1px 10px rgba(150, 150, 150, 0.3);
 
 html,
 body {
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 * {
-    font-size: 20pt;
-    font-family: 'Open Sans Condensed', sans-serif;
-    color: black;
-    -webkit-transition: all .2s ease;
-    -o-transition: all .2s ease;
-    transition: all .2s ease;
-    outline: none;
+  font-size: 20pt;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: black;
+  -webkit-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  outline: none;
 }
 
 body {
-    #map {
-        height: 500px;
-        width: 500px;
-    }
-
+  #map {
+    height: 500px;
+    width: 500px;
+  }
 }
 
-.wrapper{
-    //background-color: aqua;
-    //background-image: url({imgQR});
-    .block-open-scaner, .block-send-token, .block-activity-list{
-        height: 100vh;
-        display: flex;
-        justify-content: center;    
-    }
-    .block-activity-list{
-        width: 100%;
-    }
-    width: 100%;
+.wrapper {
+  //background-color: aqua;
+  //background-image: url({imgQR});
+  .block-open-scaner,
+  .block-send-token,
+  .block-activity-list {
     height: 100vh;
     display: flex;
     justify-content: center;
-    
-    .myQR{
-        position: absolute;
-        top: 10vh;
-        width: 30vw;
-        height: 30vw;
-        z-index: 1;
-        padding: $stockPadding*3;
-        background-color: white;
-        box-shadow: 1px 1px 30px rgba(0,0,0,.3);
-        @media (max-width: 767.98px){
-            width: 50vw;
-            height: 50vw;
-        }
-        img{
-            max-width: 100%;
-        }
-    }
-    
-    //background-image: url(../img/background.jpg);
-    .button {
-        z-index: 1;
-        max-width: 45vw;
-        max-height: 45vw;
-        border-radius: 50%;
-        box-shadow: 1px 1px 30px rgba(50, 50, 50, 0.5);
-        width: 10rem;
-        height: 10rem;
-        border: none;
-        background-color: white;
-        position: absolute;
-        bottom: 10vh;
-        //background-image: url(../img/photo-camera%20copy.png);
-        background-position: center;
-        background-size: 50%;
-        background-repeat: no-repeat;
-        animation: glow-button 2s infinite ease-in-out;
-        @media (min-width: 1024px) {
-            
-        }
-    }
+  }
+  .block-activity-list {
+    width: 100%;
+  }
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 
-    .button:hover {
-        background-color: #eee;
-        cursor: pointer;
-        box-shadow: 1px 1px 30px rgba(190, 190, 190, 0.5);
+  .myQR {
+    position: absolute;
+    top: 10vh;
+    width: 30vw;
+    height: 30vw;
+    z-index: 1;
+    padding: $stockPadding * 3;
+    background-color: white;
+    box-shadow: 1px 1px 30px rgba(0, 0, 0, 0.3);
+    @media (max-width: 767.98px) {
+      width: 50vw;
+      height: 50vw;
     }
-    
-    .button-add{
-        max-width: 20vw;
-        max-height: 20vw;
+    img {
+      max-width: 100%;
     }
+  }
 
-    .tooltip {
-        position: absolute;
-        z-index: 100;
-        top: 5vh;
-        padding: 2vh 10%;
-        width: 40%;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: $stockPadding;
-        text-align: center;
-        box-shadow: $shadow;
-        .text {
-            font-size: 1.8rem;
-        }
-        
+  //background-image: url(../img/background.jpg);
+  .button {
+    z-index: 1;
+    max-width: 45vw;
+    max-height: 45vw;
+    border-radius: 50%;
+    box-shadow: 1px 1px 30px rgba(50, 50, 50, 0.5);
+    width: 10rem;
+    height: 10rem;
+    border: none;
+    background-color: white;
+    position: absolute;
+    bottom: 10vh;
+    //background-image: url(../img/photo-camera%20copy.png);
+    background-position: center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    animation: glow-button 2s infinite ease-in-out;
+    @media (min-width: 1024px) {
     }
+  }
 
-    .background-layer {
-        position: absolute;
-        z-index: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        background-size: 110%;
-        background-repeat: no-repeat;
-        background-position: 50% 55vh;
-        animation: float 5s infinite ease-in-out;
-        
-        @media (min-width: 576px) and (max-width: 767px) {
-            background-position: 50% 55vh;
-        }
-        @media (min-width: 768px) and (max-width: 991px) {
-            background-position: 50% 55vh;
-        }
-        @media (min-width: 992px) and (max-width: 1023px) {
-            background-position: 50% 40vh;
-        }
-        @media (min-width: 1024px) {
-            background-position: 50% 35vh;
-        }
-    }
-    
-    @keyframes float {
-        0%{
-            background-position-x: 55%;
-        }
-        20%{
-            background-position-x: 40%;
-        }
-        40%{
-            background-position-x: 65%;
-        }
-        60%{
-            background-position-x: 51%;
-        }
-        80%{
-            background-position-x: 36%;
-        }
-        100%{
-            background-position-x: 54%;
-        }
-    }
-    @keyframes glow-button {
-        from{
-            box-shadow: 1px 1px 30px rgba(50, 50, 50, 0.5);
-            background-size: 50%; 
-        }
-        50%{
-            box-shadow: 1px 1px 60px rgba(200, 200, 200, 0.7);
-            background-size: 55%;
-        }
-        to{
-            box-shadow: 1px 1px 31px rgba(50, 50, 50, 0.5);
-            background-size: 51%;
-        }
-    }
+  .button:hover {
+    background-color: #eee;
+    cursor: pointer;
+    box-shadow: 1px 1px 30px rgba(190, 190, 190, 0.5);
+  }
 
-    .b-l-1 {
-        //background-image: url(../img/wave1.png);
-        animation: float 10s infinite ease-in-out;
-    }
+  .button-add {
+    max-width: 20vw;
+    max-height: 20vw;
+  }
 
-    .b-l-2 {
-        //background-image: url(../img/wave2.png);
-        animation: float 12s infinite ease-in-out;
+  .tooltip {
+    position: absolute;
+    z-index: 100;
+    top: 5vh;
+    padding: 2vh 10%;
+    width: 40%;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: $stockPadding;
+    text-align: center;
+    box-shadow: $shadow;
+    .text {
+      font-size: 1.8rem;
+      word-wrap: break-word;
     }
+  }
 
-    .b-l-3 {
-        //background-image: url(../img/wave3.png);
-        animation: float 15s infinite ease-in-out;
+  .background-layer {
+    position: absolute;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-size: 110%;
+    background-repeat: no-repeat;
+    background-position: 50% 55vh;
+    animation: float 5s infinite ease-in-out;
+
+    @media (min-width: 576px) and (max-width: 767px) {
+      background-position: 50% 55vh;
     }
-    
-    .b-l-4{
-        background-position: 50% 70vh;
-        animation: none;
+    @media (min-width: 768px) and (max-width: 991px) {
+      background-position: 50% 55vh;
     }
-    
-    .list{
-        z-index: 1;
-        padding: $stockPadding;
-        width: 100%;
+    @media (min-width: 992px) and (max-width: 1023px) {
+      background-position: 50% 40vh;
+    }
+    @media (min-width: 1024px) {
+      background-position: 50% 35vh;
+    }
+  }
+
+  @keyframes float {
+    0% {
+      background-position-x: 55%;
+    }
+    20% {
+      background-position-x: 40%;
+    }
+    40% {
+      background-position-x: 65%;
+    }
+    60% {
+      background-position-x: 51%;
+    }
+    80% {
+      background-position-x: 36%;
+    }
+    100% {
+      background-position-x: 54%;
+    }
+  }
+  @keyframes glow-button {
+    from {
+      box-shadow: 1px 1px 30px rgba(50, 50, 50, 0.5);
+      background-size: 50%;
+    }
+    50% {
+      box-shadow: 1px 1px 60px rgba(200, 200, 200, 0.7);
+      background-size: 55%;
+    }
+    to {
+      box-shadow: 1px 1px 31px rgba(50, 50, 50, 0.5);
+      background-size: 51%;
+    }
+  }
+
+  .b-l-1 {
+    //background-image: url(../img/wave1.png);
+    animation: float 10s infinite ease-in-out;
+  }
+
+  .b-l-2 {
+    //background-image: url(../img/wave2.png);
+    animation: float 12s infinite ease-in-out;
+  }
+
+  .b-l-3 {
+    //background-image: url(../img/wave3.png);
+    animation: float 15s infinite ease-in-out;
+  }
+
+  .b-l-4 {
+    background-position: 50% 70vh;
+    animation: none;
+  }
+
+  .list {
+    z-index: 1;
+    padding: $stockPadding;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    .element {
+      box-shadow: $shadow;
+      border-radius: $stockPadding;
+      padding: $stockPadding;
+      width: 80%;
+      background-color: white;
+      margin-bottom: 2vh;
+      display: flex;
+      flex-flow: row;
+      justify-content: space-around;
+      @media (max-width: 767.98px) {
+        width: 96%;
+      }
+      .name {
+        //width: 50%;
+      }
+      .limit,
+      .tokens {
+        //width: 25%;
+      }
+      .name,
+      .limit,
+      .tokens {
         display: flex;
-        align-items: center;
         flex-flow: column;
-        .element{
-            box-shadow: $shadow;
-            border-radius: $stockPadding;
-            padding: $stockPadding;
-            width: 80%;
-            background-color: white;
-            margin-bottom: 2vh;
-            display: flex;
-            flex-flow: row;
-            justify-content: space-around;
-            @media (max-width: 767.98px){
-                width: 96%;
-            }
-            .name{
-                //width: 50%;
-            }
-            .limit, .tokens{
-                //width: 25%;
-            }
-            .name, .limit, .tokens{
-                display: flex;
-                flex-flow: column;
-                justify-content: center;
-                align-items: center;
-                
-            }
-            .name .icon>img{
-                filter: hue-rotate(30deg);
-            }
-            .limit .icon>img{
-                filter: hue-rotate(60deg);
-            }
-            .tokens .icon>img{
-                filter: hue-rotate(90deg);
-            }
-            .icon{
-                img{
-                    max-height: 25px;
-                }
-            }
-        }
-        .element.deactivated{
-            background-color: #aaa;
-            color: #666;
-        }
-        .element.deactivated:hover{
-            cursor: default;
-            background-color: #aaa;
-        }
-        .element:hover{
-            cursor:pointer;
-            background-color: #eee;
-        }
-    }
-    .icon{
-        img{
-            max-height: 25px;
-        }
-    }
-    
-    .modal{
-        position: absolute;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1000;
-        display: flex;
         justify-content: center;
         align-items: center;
-        .background{
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-color: rgba(0,0,0,.6);
+      }
+      .name .icon > img {
+        filter: hue-rotate(30deg);
+      }
+      .limit .icon > img {
+        filter: hue-rotate(60deg);
+      }
+      .tokens .icon > img {
+        filter: hue-rotate(90deg);
+      }
+      .icon {
+        img {
+          max-height: 25px;
         }
-        .background:hover{
-            cursor: pointer;
-        }
-        .modal-window{
-            display: flex;
-            flex-flow: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 1001;
-            background-color: white;
-            width: 80%;
-            padding: $stockPadding;
-            border-radius: $stockPadding;
-            .button-submit-activity{
-                max-height: 10vh;
-                max-width: 10vh;
-                position: static;
-                margin-top: $stockPadding;
-                margin-bottom: $stockPadding;
-            }
-            .modal-close{
-                width: 40px;
-                height: 40px;
-                border-radius: 20px;
-                background-color: #444;
-                position: absolute;
-                top: 2%;
-                right: 2%;
-                border: none;
-            }
-            .modal-close:hover{
-                cursor: pointer;
-            }
-            input{
-                padding: $stockPadding/4 $stockPadding;
-                margin-bottom: $stockPadding;
-                margin-top: $stockPadding/2;
-            }
-        }
-        
+      }
     }
-    
-    .scaner{
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        z-index: 1002;
+    .element.deactivated {
+      background-color: #aaa;
+      color: #666;
     }
+    .element.deactivated:hover {
+      cursor: default;
+      background-color: #aaa;
+    }
+    .element:hover {
+      cursor: pointer;
+      background-color: #eee;
+    }
+  }
+  .icon {
+    img {
+      max-height: 25px;
+    }
+  }
+
+  .modal {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .background {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    .background:hover {
+      cursor: pointer;
+    }
+    .modal-window {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1001;
+      background-color: white;
+      width: 80%;
+      padding: $stockPadding;
+      border-radius: $stockPadding;
+      .button-submit-activity {
+        max-height: 10vh;
+        max-width: 10vh;
+        position: static;
+        margin-top: $stockPadding;
+        margin-bottom: $stockPadding;
+      }
+      .modal-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: #444;
+        position: absolute;
+        top: 2%;
+        right: 2%;
+        border: none;
+      }
+      .modal-close:hover {
+        cursor: pointer;
+      }
+      input {
+        padding: $stockPadding/4 $stockPadding;
+        margin-bottom: $stockPadding;
+        margin-top: $stockPadding/2;
+      }
+    }
+  }
+
+  .scaner {
+    width: 100%;
+    height: 100vh;
+    z-index: 1002;
+    display: flex;
+    justifycontent: center;
+  }
 }
