@@ -300,11 +300,11 @@ contract Guru is IERC223, Contactable {
   {
     if (_to.isContract()) {
       require(_to.call.value(0)(
-        bytes4(keccak256(_fallback)),
+        bytes4(keccak256(abi.encode(_fallback))),
         _from,
         _value,
         _data
-      ));
+      ), "incorrect function call");
     }
   }
 
