@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import contract, { balanceOf } from '../services/guruContract';
+// import contract, { balanceOf } from '../services/guruContract';
 import Scanner from '../services/Scanner.jsx';
 import img from '../assets/logo.png';
 
@@ -16,10 +16,10 @@ export default class AdminPage extends Component {
   };
 
   checkBalance = async () => {
-    const balance = await balanceOf();
-    console.log(balance);
-    this.setState({ balance });
-    debugger;
+    // const balance = await balanceOf();
+    // console.log(balance);
+    // this.setState({ balance });
+    // debugger;
   };
 
   handleScan = customerAddress => {

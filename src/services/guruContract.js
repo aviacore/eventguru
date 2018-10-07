@@ -1,5 +1,6 @@
 import testdata from '../artifacts/gurutAbi.json';
 import { parseNumber } from '../../test/helpers/bignumberUtils';
+import 'web3';
 
 const promisify = inner => (...args) =>
   new Promise((resolve, reject) =>
@@ -10,30 +11,30 @@ const promisify = inner => (...args) =>
 //     web3 = new Web3(web3.currentProvider);
 // } else {
 // set the provider you want from Web3.providers
-web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+// web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 // }
-
-web3.eth.defaultAccount = web3.eth.accounts[0];
-
-export const contractAddress = testdata.address;
-const contract = web3.eth.contract(testdata.abi).at(contractAddress);
-console.log(contract);
-
-export default contract;
-
-const functionNames = Object.keys(contract);
-
-const contractFunctions = functionNames.reduce((res, funcName) => {
-  const func = contract[funcName];
-  if (typeof func === 'function') {
-    res[funcName] = promisify(func);
-  }
-
-  return res;
-}, {});
-
-export const balanceOf = (address = web3.eth.accounts[0]) =>
-  contractFunctions.balanceOf(address).then(parseNumber);
+//
+// web3.eth.defaultAccount = web3.eth.accounts[0];
+//
+// export const contractAddress = testdata.address;
+// const contract = web3.eth.contract(testdata.abi).at(contractAddress);
+// console.log(contract);
+//
+// export default contract;
+//
+// const functionNames = Object.keys(contract);
+//
+// const contractFunctions = functionNames.reduce((res, funcName) => {
+//   const func = contract[funcName];
+//   if (typeof func === 'function') {
+//     res[funcName] = promisify(func);
+//   }
+//
+//   return res;
+// }, {});
+//
+// export const balanceOf = (address = web3.eth.accounts[0]) =>
+//   contractFunctions.balanceOf(address).then(parseNumber);
 
 // symbol: ƒ () string
 // name: ƒ () string
@@ -60,4 +61,4 @@ export const balanceOf = (address = web3.eth.accounts[0]) =>
 // transactionHash: null
 // transfer: ƒ ()
 // transferFrom: ƒ ()
-// transferOwnership: ƒ ()
+// transferOwnership
