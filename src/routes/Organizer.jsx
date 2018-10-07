@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Activity from '../routes/Activity.jsx'
+import {activities} from '../services/contants'
 
 import background from '../assets/img/background.jpg';
 import backWave4 from '../assets/img/wave4.png';
@@ -7,6 +8,7 @@ import imgButtonAdd from '../assets/img/plus.png';
 import icon1 from '../assets/img/icon1.png';
 import icon2 from '../assets/img/icon2.png';
 import icon3 from '../assets/img/icon3.png';
+
 
 const style = {
     backgroundImage: 'url(' + background + ')',
@@ -19,28 +21,9 @@ export default class Organizer extends Component {
             activityName: '',
             activityLimit: '',
             activityTokens: '',
-            activityList: [
-                {
-                    id: 0,
-                    name: 'Registration',
-                    limit: 100,
-                    tokens: 1
-                },
-                {
-                    id: 1,
-                    name: 'Question',
-                    limit: 3,
-                    tokens: 1
-                },
-                {
-                    id: 2,
-                    name: 'Speaker',
-                    limit: 4,
-                    tokens: 2
-                }
-            ],
+            activityList: activities,
             modalOpened: false
-        }
+        };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.changeActivityName = this.changeActivityName.bind(this);
