@@ -629,8 +629,8 @@ contract('Guru', function(accounts) {
       });
     });
 
-    context('when the msg.sender isn\'t owner', function () {
-      it('reverts', async function () {
+    context("when the msg.sender isn't owner", function() {
+      it('reverts', async function() {
         await assertRevert(this.token.mint(100, { from: accounts[1] }));
       });
     });
@@ -653,7 +653,7 @@ contract('Guru', function(accounts) {
       });
     });
 
-    context('when the msg.sender isn\'t owner', function() {
+    context("when the msg.sender isn't owner", function() {
       it('reverts', async function() {
         await assertRevert(this.token.addAdmin(accounts[4], { from: accounts[1] }));
       });
