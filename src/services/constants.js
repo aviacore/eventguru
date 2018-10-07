@@ -1,5 +1,3 @@
-
-
 export const activities = [
   {
     id: 'registration',

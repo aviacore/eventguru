@@ -7,7 +7,7 @@ const promisify = inner => (...args) =>
     inner(...args, (err, res) => (err ? reject(err) : resolve(res)))
   );
 
-if (typeof web3 === 'undefined') {
+if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
   web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
@@ -21,21 +21,21 @@ console.log(contract);
 
 export default contract;
 
-debugger;
-
 const functionNames = Object.keys(contract);
 
 export const contractFunctions = functionNames.reduce((res, funcName) => {
   const func = contract[funcName];
   if (typeof func === 'function') {
     if (funcName === 'transfer') {
-      return { ...res, [funcName]: promisify(func['address,uint256,bytes']) };
+      return {
+        ...res,
+        [funcName]: (...args) =>
+          promisify(func['address,uint256,bytes'])(...args, { from: web3.defaultAccount })
+      };
     }
 
     return { ...res, [funcName]: promisify(func) };
   }
-
-  // contract.transfer['address,uint256,bytes']('0x40fEa9240b077b37765317577b4c6e8E3Af51635', 1, web3.toHex('question'), { from: '0x1A0DC51D3847C2036B48c85AE8629A11487535fA' })
 
   return res;
 }, {});

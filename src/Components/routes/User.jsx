@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import background from '../assets/img/background.jpg';
-import backWave1 from '../assets/img/wave1.png';
-import backWave2 from '../assets/img/wave2.png';
-import backWave3 from '../assets/img/wave3.png';
-import imgQR from '../assets/img/QRCode.png';
+import background from '../../assets/img/background.jpg';
+import backWave1 from '../../assets/img/wave1.png';
+import backWave2 from '../../assets/img/wave2.png';
+import backWave3 from '../../assets/img/wave3.png';
+import imgQR from '../../assets/img/QRCode.png';
 
 export default class User extends Component {
   constructor(props) {

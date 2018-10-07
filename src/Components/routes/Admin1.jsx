@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import SendTokens from './SendTokens.jsx';
-import Scanner from '../services/Scanner.jsx';
-import {contractFunctions} from '../services/guruContract';
+import Scanner from '../Scanner.jsx';
+import {contractFunctions} from '../../services/guruContract';
 
-import background from '../assets/img/background.jpg';
-import backWave1 from '../assets/img/wave1.png';
-import backWave2 from '../assets/img/wave2.png';
-import backWave3 from '../assets/img/wave3.png';
-import imgButtonScan from '../assets/img/photo_camera.png';
-import { activitiesMap } from '../services/contants';
+import background from '../../assets/img/background.jpg';
+import backWave1 from '../../assets/img/wave1.png';
+import backWave2 from '../../assets/img/wave2.png';
+import backWave3 from '../../assets/img/wave3.png';
+import imgButtonScan from '../../assets/img/photo_camera.png';
+import { activitiesMap } from '../../services/constants';
 
 const registerActivity = activitiesMap.registration;
 
