@@ -79,7 +79,7 @@ contract Guru is IERC223, Contactable {
    * @return uint256 the account owned tokens amount
    */
   function balanceOf(address _who) public view returns (uint256) {
-    require(_who != address(0), "you specified a zero address");
+    require(_who != address(0));
     return balances[_who];
   }
 
