@@ -1,6 +1,6 @@
 # 🎉 EventGuru 🎉
 
-Our idea is to develop a decentralized event rating accounting application on the blockchain technology
+Our idea is to develop a decentralized event rating accounting application on the blockchain technology<br>
 Kovan testnet contract: https://kovan.etherscan.io/address/0x61674a00f5e5a0514a800cdf466a68a6ed7cf3bb
 
 # License
