@@ -37,7 +37,7 @@ contract Guru is IERC223, Contactable {
    * @param _teamFund address the team fund
    */
   constructor(address _teamFund) public {
-    require(_teamFund != address(0));
+    require(_teamFund != address(0), "you specified a zero address");
     teamFund = _teamFund;
   }
 
@@ -79,7 +79,7 @@ contract Guru is IERC223, Contactable {
    * @return uint256 the account owned tokens amount
    */
   function balanceOf(address _who) public view returns (uint256) {
-    require(_who != address(0));
+    require(_who != address(0), "you specified a zero address");
     return balances[_who];
   }
 
@@ -89,8 +89,8 @@ contract Guru is IERC223, Contactable {
   function allowance(address _owner, address _spender)
     public view returns (uint256)
   {
-    require(_owner != address(0));
-    require(_spender != address(0));
+    require(_owner != address(0), "you specified a zero address");
+    require(_spender != address(0), "you specified a zero address");
     return allowed[_owner][_spender];
   }
 
@@ -142,8 +142,8 @@ contract Guru is IERC223, Contactable {
     public
     returns (bool)
   {
-    require(_to != address(0));
-    require(_value <= balances[msg.sender]);
+    require(_to != address(0), "you specified a zero address");
+    require(_value <= balances[msg.sender], "you don't have so many tokens");
 
     balances[_to] = balances[_to].add(_value);
     balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -210,9 +210,12 @@ contract Guru is IERC223, Contactable {
     public
     returns (bool)
   {
-    require(_from != address(0));
-    require(_to != address(0));
-    require(_value <= allowed[_from][msg.sender]);
+    require(_from != address(0), "you specified a zero address");
+    require(_to != address(0), "you specified a zero address");
+    require(
+      _value <= allowed[_from][msg.sender],
+      "the tokens owner didn't allow you to spend so many tokens"
+    );
 
     balances[_to] = balances[_to].add(_value);
     balances[_from] = balances[_from].sub(_value);
@@ -230,8 +233,8 @@ contract Guru is IERC223, Contactable {
    * @param _value uint256 amount of the tokens to be approved
    */
   function approve(address _spender, uint256 _value) public {
-    require(_spender != address(0));
-    require(_value <= balances[msg.sender]);
+    require(_spender != address(0), "you specified a zero address");
+    require(_value <= balances[msg.sender], "you don't have so many tokens");
     allowed[msg.sender][_spender] = _value;
     emit Approval(msg.sender, _spender, _value);
   }
@@ -242,8 +245,11 @@ contract Guru is IERC223, Contactable {
    * @param _value uint256 amount of the tokens to be added
    */
   function increaseApproval(address _spender, uint256 _value) public {
-    require(_spender != address(0));
-    require(allowed[msg.sender][_spender].add(_value) <= balances[msg.sender]);
+    require(_spender != address(0), "you specified a zero address");
+    require(
+      allowed[msg.sender][_spender].add(_value) <= balances[msg.sender],
+      "you don't have so many tokens"
+    );
     allowed[msg.sender][_spender] = allowed[msg.sender][_spender].add(_value);
     emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
   }
@@ -254,8 +260,8 @@ contract Guru is IERC223, Contactable {
    * @param _value uint256 amount of the tokens to be substracted
    */
   function decreaseApproval(address _spender, uint256 _value) public {
-    require(_spender != address(0));
-    require(_value <= allowed[msg.sender][_spender]);
+    require(_spender != address(0), "you specified a zero address");
+    require(_value <= allowed[msg.sender][_spender], "this approval is less");
     allowed[msg.sender][_spender] = allowed[msg.sender][_spender].sub(_value);
     emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
   }
@@ -276,7 +282,7 @@ contract Guru is IERC223, Contactable {
    * @param _admin address the administrator
    */
   function addAdmin(address _admin) public onlyOwner {
-    require(_admin != address(0));
+    require(_admin != address(0), "you specified a zero address");
     admins.push(_admin);
   }
 
@@ -304,7 +310,7 @@ contract Guru is IERC223, Contactable {
         _from,
         _value,
         _data
-      ));
+      ), "incorrect function call");
     }
   }
 
